@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
 
-function App() {
+interface Props {
+  name: string;
+}
+
+const SayHello: React.FC<Props> = ({ name }) => {
+  const [state] = useState<{ name: string | null }>({ name: "" }); //hooks use generics by default, but you can override them like this
+
+  return <p>hello {name}</p>;
+};
+
+interface FormProps<T> {
+  values: T;
+  children: (values: T) => JSX.Element;
+}
+
+const Form = <T extends {}>({ values, children }: FormProps<T>) => {
+  return children(values);
+};
+
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Form values={{ firstName: "bob" }}>
+        {values => <div>{values.firstName}</div>}
+      </Form>
     </div>
   );
-}
+};
 
 export default App;
